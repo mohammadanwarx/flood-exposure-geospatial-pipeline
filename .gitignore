@@ -39,15 +39,12 @@ ENV/
 
 # Data files (don't commit large datasets)
 data/raw/*
-data/processed/*
-data/external/*
 !data/raw/.gitkeep
-!data/processed/.gitkeep
-!data/external/.gitkeep
+!data/raw/*/.gitkeep
 
 # Outputs
-report/figures/*
-!report/figures/.gitkeep
+outputs/*
+!outputs/.gitkeep
 
 # OS
 .DS_Store
