@@ -1,6 +1,6 @@
 """
-Flood Exposure Assessment in the Nile Basin
-============================================
+Flood Exposure Assessment in the Nile Basin Region
+===================================================
 
 Flood exposure assessment using DEM-derived flow accumulation and drainage 
 network analysis. A comprehensive pipeline including DEM processing, hydrology 

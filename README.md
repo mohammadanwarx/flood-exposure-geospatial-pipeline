@@ -1,6 +1,6 @@
-# Flood Exposure Assessment in the Nile Basin Using DEM-Derived Flow Accumulation and Drainage Network Analysis
+# Flood Exposure Assessment in the Nile Basin Region Using DEM-Derived Flow Accumulation and Drainage Network Analysis
 
-A comprehensive geospatial analysis pipeline for flood exposure assessment in the Nile Basin using DEM processing, hydrological analysis, tensor operations, and data cubes.
+A comprehensive geospatial analysis pipeline for flood exposure assessment in the Nile Basin Region using DEM processing, hydrological analysis, tensor operations, and data cubes.
 
 ## Features
 

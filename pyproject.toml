@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "flood-exposure-geospatial-pipeline"
 version = "0.1.0"
-description = "Flood Exposure Assessment in the Nile Basin Using DEM-Derived Flow Accumulation and Drainage Network Analysis"
+description = "Flood Exposure Assessment in the Nile Basin Region Using DEM-Derived Flow Accumulation and Drainage Network Analysis"
 authors = ["Your Name <your.email@example.com>"]
 readme = "README.md"
 packages = [{include = "src"}]
