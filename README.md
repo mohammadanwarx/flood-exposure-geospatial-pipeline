@@ -20,16 +20,28 @@ flood-exposure-geospatial-pipeline/
 │       ├── raster/         # DEM, flood depth, population data
 │       └── vector/         # Administrative boundaries, features
 ├── src/
+│   ├── __init__.py
 │   ├── dem_processing.py   # DEM loading, slope, resampling
 │   ├── hydrology.py        # Flow direction, accumulation, TWI
 │   ├── exposure.py         # Flood depth, exposure assessment, risk mapping
 │   ├── tensors.py          # Tensor operations, normalization, PCA
 │   ├── cubes.py            # Data cube management with xarray
 │   └── visualization.py    # Plotting functions
-├── tests/                  # Comprehensive unit tests
+├── tests/
+│   ├── conftest.py
+│   ├── test_dem_processing.py
+│   ├── test_hydrology.py
+│   ├── test_exposure.py
+│   ├── test_tensors.py
+│   ├── test_cubes.py
+│   └── test_visualization.py
 ├── notebooks/              # Jupyter notebooks for analysis
 ├── outputs/                # Analysis results and figures
-└── example.py              # Example workflow script
+├── .gitignore
+├── LICENSE
+├── pyproject.toml          # Poetry configuration
+├── requirements.txt        # Pip dependencies
+└── README.md
 ```
 
 ## Installation
