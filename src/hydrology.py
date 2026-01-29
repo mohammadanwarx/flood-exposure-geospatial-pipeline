@@ -31,7 +31,20 @@ def calculate_flow_direction(dem: np.ndarray) -> np.ndarray:
     dy = [0, 1, 1, 1, 0, -1, -1, -1]
     powers = [1, 2, 4, 8, 16, 32, 64, 128]
     
-    # TODO: Implement D8 flow direction algorithm
+    # Compute D8 flow direction based on steepest downslope neighbor
+    for r in range(1, rows - 1):
+        for c in range(1, cols - 1):
+            center = dem[r, c]
+            max_drop = 0.0
+            direction = 0
+            for i in range(8):
+                rr = r + dy[i]
+                cc = c + dx[i]
+                drop = center - dem[rr, cc]
+                if drop > max_drop:
+                    max_drop = drop
+                    direction = powers[i]
+            flow_dir[r, c] = direction
     
     return flow_dir
 
@@ -53,7 +66,45 @@ def calculate_flow_accumulation(flow_dir: np.ndarray) -> np.ndarray:
     rows, cols = flow_dir.shape
     flow_acc = np.ones_like(flow_dir, dtype=np.float64)
     
-    # TODO: Implement flow accumulation algorithm
+    # Build downstream mapping and indegree for topological accumulation
+    downstream_r = np.full_like(flow_dir, -1, dtype=np.int32)
+    downstream_c = np.full_like(flow_dir, -1, dtype=np.int32)
+    indegree = np.zeros_like(flow_dir, dtype=np.int32)
+
+    # D8 directions: E, SE, S, SW, W, NW, N, NE
+    dx = [1, 1, 0, -1, -1, -1, 0, 1]
+    dy = [0, 1, 1, 1, 0, -1, -1, -1]
+    powers = [1, 2, 4, 8, 16, 32, 64, 128]
+    power_to_idx = {p: i for i, p in enumerate(powers)}
+
+    for r in range(rows):
+        for c in range(cols):
+            p = flow_dir[r, c]
+            if p == 0:
+                continue
+            i = power_to_idx.get(int(p), None)
+            if i is None:
+                continue
+            rr = r + dy[i]
+            cc = c + dx[i]
+            if 0 <= rr < rows and 0 <= cc < cols:
+                downstream_r[r, c] = rr
+                downstream_c[r, c] = cc
+                indegree[rr, cc] += 1
+
+    # Kahn's algorithm for DAG accumulation
+    queue = [(r, c) for r in range(rows) for c in range(cols) if indegree[r, c] == 0]
+    head = 0
+    while head < len(queue):
+        r, c = queue[head]
+        head += 1
+        rr = downstream_r[r, c]
+        cc = downstream_c[r, c]
+        if rr >= 0 and cc >= 0:
+            flow_acc[rr, cc] += flow_acc[r, c]
+            indegree[rr, cc] -= 1
+            if indegree[rr, cc] == 0:
+                queue.append((rr, cc))
     
     return flow_acc
 
@@ -74,8 +125,47 @@ def delineate_watersheds(flow_dir: np.ndarray, pour_points: np.ndarray) -> np.nd
     np.ndarray
         Watershed delineation array
     """
-    # TODO: Implement watershed delineation
-    watersheds = np.zeros_like(flow_dir)
+    rows, cols = flow_dir.shape
+    watersheds = np.zeros_like(flow_dir, dtype=np.int32)
+
+    # D8 directions: E, SE, S, SW, W, NW, N, NE
+    dx = [1, 1, 0, -1, -1, -1, 0, 1]
+    dy = [0, 1, 1, 1, 0, -1, -1, -1]
+    powers = [1, 2, 4, 8, 16, 32, 64, 128]
+    power_to_idx = {p: i for i, p in enumerate(powers)}
+
+    # Pour points may be binary or labeled; use nonzero values as IDs
+    pour_ids = pour_points.astype(np.int32)
+
+    for r in range(rows):
+        for c in range(cols):
+            if watersheds[r, c] != 0:
+                continue
+            path = []
+            rr, cc = r, c
+            while True:
+                path.append((rr, cc))
+                if pour_ids[rr, cc] != 0:
+                    label = pour_ids[rr, cc]
+                    break
+                p = flow_dir[rr, cc]
+                i = power_to_idx.get(int(p), None)
+                if i is None:
+                    label = 0
+                    break
+                nr = rr + dy[i]
+                nc = cc + dx[i]
+                if not (0 <= nr < rows and 0 <= nc < cols):
+                    label = 0
+                    break
+                if watersheds[nr, nc] != 0:
+                    label = watersheds[nr, nc]
+                    break
+                rr, cc = nr, nc
+
+            for pr, pc in path:
+                watersheds[pr, pc] = label
+
     return watersheds
 
 
