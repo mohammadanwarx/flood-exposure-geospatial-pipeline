@@ -6,9 +6,15 @@ for flood exposure analysis.
 """
 
 import numpy as np
-import rasterio
-from rasterio.warp import reproject, Resampling
 from typing import Tuple, Optional
+
+# Optional rasterio import
+try:
+    import rasterio
+    from rasterio.warp import reproject, Resampling
+    HAS_RASTERIO = True
+except ImportError:
+    HAS_RASTERIO = False
 
 
 def load_dem(filepath: str) -> Tuple[np.ndarray, dict]:
@@ -25,6 +31,8 @@ def load_dem(filepath: str) -> Tuple[np.ndarray, dict]:
     Tuple[np.ndarray, dict]
         DEM array and metadata dictionary
     """
+    if not HAS_RASTERIO:
+        raise ImportError("rasterio required. Install: pip install rasterio")
     with rasterio.open(filepath) as src:
         dem = src.read(1)
         metadata = src.meta.copy()
