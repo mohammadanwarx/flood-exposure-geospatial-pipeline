@@ -249,15 +249,35 @@ fpi = compute_flood_propensity_index(rainfall_cube, dem_filled, slope, flow_acc)
 | Flow accumulation | T₁ | Upslope contributing area (D8 algorithm) | Water concentration potential |
 | Inverted slope | T₂ | 1 / tan(slope) | Flat areas → higher propensity |
 
+### Topographic Wetness Index (TWI)
+
+The TWI quantifies the tendency of water to accumulate at a location based on topography:
+
+$$TWI = \ln\left(\frac{a}{\tan(\beta)}\right)$$
+
+Where:
+- $a$ = specific catchment area (flow accumulation × cell size, m²)
+- $\beta$ = local slope angle (radians)
+
+**Interpretation:** High TWI values indicate areas where water tends to accumulate (valleys, flat areas), while low values indicate well-drained slopes.
+
 ### Flood Propensity Index (FPI)
 
 The FPI is computed as a weighted combination of normalised indicators:
 
-```
-FPI = w₁·R₁′ + w₂·R₂′ + w₃·R₃′ + w₄·T₁′ + w₅·T₂′
-```
+$$FPI = w_1 \cdot R_1' + w_2 \cdot R_2' + w_3 \cdot R_3' + w_4 \cdot T_1' + w_5 \cdot T_2'$$
 
-Where primes (′) denote min-max normalised values in [0, 1].
+Where:
+- $R_1'$ = normalised mean rainfall [0, 1]
+- $R_2'$ = normalised 95th percentile rainfall [0, 1]
+- $R_3'$ = normalised coefficient of variation [0, 1]
+- $T_1'$ = normalised log(flow accumulation) [0, 1]
+- $T_2'$ = normalised inverted slope [0, 1]
+- $w_i$ = weights (default: 0.2 each, sum to 1.0)
+
+**Normalisation:** Min-max scaling applied per indicator:
+
+$$I' = \frac{I - I_{min}}{I_{max} - I_{min}}$$
 
 Default weights: equal weighting (0.2 each). Weights can be adjusted based on domain expertise or sensitivity analysis.
 
@@ -380,12 +400,58 @@ The pipeline produces 7 key visualizations organized by analysis phase:
 python -m venv .venv
 .venv\Scripts\activate  # Windows
 pip install -r requirements.txt
+pip install -e .  # Install package in editable mode
 ```
 
 **Using Poetry:**
 ```bash
+# Install Poetry (if not already installed)
+pip install poetry
+
+# Install all dependencies
 poetry install
+
+# Activate the Poetry shell
 poetry shell
+```
+
+### Running the Package
+
+**Option 1: Activate environment first (recommended)**
+```bash
+# Using pip/venv
+.venv\Scripts\activate
+pytest tests/ -v --cov=src --cov-report=term
+
+# Using Poetry
+poetry shell
+pytest tests/ -v --cov=src --cov-report=term
+```
+
+**Option 2: Run commands directly through Poetry**
+```bash
+# Run tests
+poetry run pytest tests/ -v --cov=src --cov-report=term
+
+# Run Python scripts
+poetry run python your_script.py
+
+# Start Jupyter notebook
+poetry run jupyter notebook
+```
+
+**Option 3: Use full path without activation**
+```bash
+.\.venv\Scripts\python.exe -m pytest tests/ -v --cov=src
+```
+
+### Importing Modules
+
+Once installed, import modules from anywhere:
+```python
+from src._01_data_loading import buildings, rainfall_processing
+from src._02_processing import cubes, tensors, dem_processing
+from src._03_analysis import hydrology, flood_propensity, exposure
 ```
 
 ### Running Tests
