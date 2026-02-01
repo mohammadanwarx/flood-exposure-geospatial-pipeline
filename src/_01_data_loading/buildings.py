@@ -410,7 +410,7 @@ def load_buildings(filepath: str) -> gpd.GeoDataFrame:
 
 # ===============================================
 # Population Estimation Functions
-# ===============================================
+
 
 def estimate_population_from_buildings(buildings_gdf: gpd.GeoDataFrame, 
                                        household_size: int = 6) -> pd.Series:

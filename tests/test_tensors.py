@@ -2,7 +2,7 @@
 
 import pytest
 import numpy as np
-from src.tensors import (
+from src._02_processing.tensors import (
     create_geospatial_tensor,
     normalize_tensor,
     apply_convolution,

@@ -2,7 +2,7 @@
 
 import pytest
 import numpy as np
-from src.hydrology import (
+from src._03_analysis.hydrology import (
     calculate_flow_direction,
     calculate_flow_accumulation,
     extract_stream_network,

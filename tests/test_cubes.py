@@ -4,7 +4,7 @@ import pytest
 import numpy as np
 import xarray as xr
 from datetime import datetime, timedelta
-from src.cubes import (
+from src._02_processing.cubes import (
     GeospatialCube,
     create_flood_cube,
     merge_cubes,
@@ -35,7 +35,8 @@ def test_geospatial_cube_init():
     data = xr.DataArray(
         np.random.rand(3, 5, 5),
         coords={'time': [1, 2, 3], 'y': range(5), 'x': range(5)},
-        dims=['time', 'y', 'x']
+        dims=['time', 'y', 'x'],
+        name='test_variable'  # DataArray must be named for to_dataset()
     )
     
     cube = GeospatialCube(data)

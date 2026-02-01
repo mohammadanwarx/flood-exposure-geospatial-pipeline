@@ -285,19 +285,65 @@ Exposed_Population = N_exposed_buildings × 6
 
 ## Visualisation & Outputs
 
-### Generated Maps
+### Generated Figures
 
-| Output | Description |
-|--------|-------------|
-| `outputs/exposure_map_buildings_on_fpi.png` | Building exposure overlaid on FPI raster |
-| `outputs/aoi_zones_map_6zones.png` | Administrative zone delineation |
-| `outputs/DEM_Elevation_Map.png` | DEM elevation visualisation |
-| `outputs/DEM_Flow_TWI_FPI_Rainfall.png` | Multi-panel terrain/hydrology summary |
+The pipeline produces 7 key visualizations organized by analysis phase:
+
+---
+
+#### **Part A: Rainfall Analysis**
+
+**1. Average Monthly Rainfall Time Series**
+![Average Monthly Rainfall Over AOI](outputs/Average%20Monthly%20Rainfall%20Over%20AOI.png)
+*Temporal trend of mean monthly rainfall across the AOI (2018-2025) showing seasonal patterns and inter-annual variability.*
+
+---
+
+**2. Monthly Rainfall Pattern by Year**
+![Monthly Rainfall Pattern by Year](outputs/Monthly%20Rainfall%20Pattern%20by%20Year.png)
+*Year-over-year comparison of monthly rainfall highlighting the wet season (July-September) peak across all years.*
+
+---
+
+#### **Part B: DEM & Hydrological Analysis**
+
+**3. Digital Elevation Model (DEM)**
+![DEM Elevation Map](outputs/DEM_Elevation_Map.png)
+*Terrain elevation map showing topographic variation across the Bahri region with AOI boundary overlay.*
+
+---
+
+**4. Flood Propensity Index (FPI)**
+![Flood Propensity Visualization](outputs/Flood%20Propensity%20Visualization.png)
+*Continuous FPI raster (0-1 scale) showing spatial distribution of flood-prone areas based on rainfall and terrain indicators.*
+
+---
+
+**5. Multi-Factor Comparison: DEM, Flow, TWI, FPI, Rainfall**
+![DEM Flow TWI FPI Rainfall](outputs/DEM_Flow_TWI_FPI_Rainfall.png)
+*6-panel comparative analysis integrating elevation, flow accumulation, topographic wetness, flood propensity, risk categories, and rainfall.*
+
+---
+
+#### **Part C: Flood Exposure Assessment**
+
+**6. Building Exposure Map**
+![Exposure Map Buildings on FPI](outputs/exposure_map_buildings_on_fpi.png)
+*Building footprints overlaid on FPI raster showing spatial distribution of exposed structures by risk level.*
+
+---
+
+**7. District-Level Flood Metrics**
+![District Metrics Maps](outputs/district_metrics_maps.png)
+*4-panel choropleth showing FPI mean, rainfall, high-risk percentage, and area by administrative district.*
+
+---
 
 ### Vector Outputs
 
 | Output | Description |
 |--------|-------------|
+| `data/processed/district_metrics.geojson` | District-level flood metrics (FPI, rainfall, area, risk %) |
 | `outputs/buildings_aoi.geojson` | Building footprints with exposure attributes |
 | `outputs/zone_exposure_metrics.geojson` | Zonal statistics (FPI mean, buildings, population) |
 

@@ -3,7 +3,7 @@
 import pytest
 import numpy as np
 import geopandas as gpd
-from src.exposure import (
+from src._03_analysis.exposure import (
     calculate_flood_depth,
     identify_flooded_areas,
     assess_population_exposure,

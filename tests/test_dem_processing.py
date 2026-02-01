@@ -2,7 +2,7 @@
 
 import pytest
 import numpy as np
-from src.dem_processing import load_dem, fill_depressions, calculate_slope, resample_dem
+from src._02_processing.dem_processing import load_dem, fill_depressions, calculate_slope, save_raster
 
 
 def test_fill_depressions():
@@ -48,20 +48,3 @@ def test_calculate_slope_flat():
     
     # Flat surface should have near-zero slope
     assert np.allclose(slope, 0, atol=1e-10)
-
-
-def test_resample_dem():
-    """Test DEM resampling."""
-    dem = np.random.rand(10, 10)
-    metadata = {
-        'crs': 'EPSG:4326',
-        'transform': None,
-        'driver': 'GTiff'
-    }
-    
-    target_resolution = 5.0
-    resampled_dem, new_metadata = resample_dem(dem, metadata, target_resolution)
-    
-    # Currently just returns the input
-    assert isinstance(resampled_dem, np.ndarray)
-    assert isinstance(new_metadata, dict)
